@@ -27,9 +27,6 @@ def login():
             if user and check_password_hash(user.password, form.password.data):
                 login_user(user)
                 return redirect(url_for('index'))
-            else:
-                return render_template('login.html', form=form, errors=form.errors)
-            # return '<h1>Invalid form</h1>'
     return render_template('login.html', form=form)
 
 
