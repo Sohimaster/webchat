@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+    {% block styles %}
+        <link rel="stylesheet" href={{ url_for('static', filename='css/login.css') }}>
+    {% endblock %}
+    {% block content %}
+        <div class="container">
+            <h1>Welcome</h1>
+            <form class="form" method="post" action={{ url_for('login') }}>
+                {{ form.hidden_tag() }}
+                {{ form.username(placeholder="Username") }}
+                {{ form.password(placeholder="Password") }}
+                <button type="submit" id="login-button">Login</button>
+            </form>
+        </div>
+    {% endblock %}
