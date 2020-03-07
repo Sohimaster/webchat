@@ -49,6 +49,9 @@ body {
   height: 96px;
   padding: 29px;
 }
+.container .left .top input::placeholder{
+  color: var(--black);
+}
 .container .left .top:after {
   position: absolute;
   bottom: 0;
@@ -62,7 +65,7 @@ body {
 }
 .container .left input {
   float: left;
-  width: 188px;
+  width: 100%;
   height: 42px;
   padding: 0 15px;
   border: 1px solid var(--light);
@@ -74,20 +77,9 @@ body {
 .container .left input:focus {
   outline: none;
 }
-.container .left a.search {
-  display: block;
-  float: left;
-  width: 42px;
-  height: 42px;
-  margin-left: 10px;
-  border: 1px solid var(--light);
-  background-color: var(--blue);
-  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/name-type.png");
-  background-repeat: no-repeat;
-  background-position: top 12px left 14px;
-  border-radius: 50%;
-}
 .container .left .people {
+  overflow: auto;
+  height: calc(100% - 95px);
   margin-left: -1px;
   border-right: 1px solid var(--light);
   border-left: 1px solid var(--light);
@@ -114,7 +106,7 @@ body {
   line-height: 22px;
   color: var(--dark);
   font-family: "Source Sans Pro", sans-serif;
-  font-weight: 600;
+  font-weight: bold;
 }
 .container .left .people .person .time {
   font-size: 14px;
@@ -132,17 +124,11 @@ body {
   width: 70%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--grey);
+  color: var(--black);
 }
 
 .container .left .people .person.active, .container .left .people .person:hover {
-  margin-top: -1px;
-  margin-left: -1px;
-  padding-top: 13px;
-  border: 0;
   background-color: var(--blue);
-  width: calc(100% + 2px);
-  padding-left: calc(10% + 1px);
 }
 .container .left .people .person.active span, .container .left .people .person:hover span {
   color: var(--white);
@@ -165,7 +151,7 @@ body {
 }
 .container .right .top span {
   font-size: 15px;
-  color: var(--grey);
+  color: var(--black);
 }
 .container .right .top span .name {
   color: var(--dark);
