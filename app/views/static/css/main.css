@@ -44,12 +44,16 @@ body :-ms-input-placeholder {
   color: white;
   font-weight: 300;
 }
+:root {
+  --bg-color: #50a3a2;
+  --bg-gradient-to-color: #53e3a6;
+}
 .wrapper {
-  background: #50a3a2;
-  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+  background: var(--bg-color);
+  background: -webkit-linear-gradient(top left, var(--bg-color) 0%, var(--bg-gradient-to-color) 100%);
+  background: -moz-linear-gradient(top left, var(--bg-color) 0%, var(--bg-gradient-to-color) 100%);
+  background: -o-linear-gradient(top left, var(--bg-color) 0%, var(--bg-gradient-to-color) 100%);
+  background: linear-gradient(to bottom right, var(--bg-color) 0%, var(--bg-gradient-to-color) 100%);
   position: absolute;
   left: 0;
   width: 100%;

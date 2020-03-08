@@ -77,7 +77,7 @@
   position: relative;
   width: 100%;
   padding: 12px 10% 16px;
-  height: 80px;
+  height: 75px;
   cursor: pointer;
   background-color: var(--white);
 }
@@ -90,7 +90,7 @@
   border-radius: 50%;
 }
 .container .left .people .person .name {
-  font-size: 14px;
+  font-size: 18px;
   line-height: 22px;
   color: var(--dark);
   font-family: "Source Sans Pro", sans-serif;
@@ -110,13 +110,16 @@
   display: inline-block;
   overflow: hidden !important;
   width: 70%;
+  font-weight: bold;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--black);
 }
 
 .container .left .people .person.active, .container .left .people .person:hover {
-  background-color: var(--blue);
+  /*background-color: var(--blue);*/
+  background-color:  #87BBE8  ;;
+  /*background: linear-gradient(to right, #$);*/
 }
 .container .left .people .person.active span, .container .left .people .person:hover span {
   color: var(--white);
@@ -231,8 +234,10 @@
 }
 .container .right .bubble.you {
   float: left;
-  color: var(--white);
-  background-color: var(--blue);
+  color: var(--black);
+  background-color:  #A1A7FF ;
+  /*background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);*/
+  /*background-color: var(--blue);*/
   align-self: flex-start;
   animation-name: slideFromLeft;
 }
