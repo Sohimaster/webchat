@@ -1,0 +1,157 @@
+{% extends "main.html" %}
+    {% block styles %}
+        <link rel="stylesheet" href={{ url_for('static', filename='css/chat.css') }}>
+    {% endblock %}
+    {% block content %}
+        <a href="{{ url_for('logout') }}"><button type="button" id="logout-button">Logout</button></a>
+            <div class="container">
+                <div class="left">
+                    <div class="top">
+                        <input type="text" placeholder="Search" />
+                    </div>
+                    <ul class="people">
+                        {% for user in users %}
+                            <li class="person" data-chat="person{{ user.id }}">
+                                <img src="{{ avatars.robohash(user.email_hash) }}" alt="" />
+                                <span class="name">{{ user.username }}</span>
+                                <span class="time">2:09 PM</span>
+                                                            <br>
+                                <span class="preview">I was wondering...</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="right">
+                    <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div>
+                    <div class="chat" data-chat="person1">
+                        <div class="conversation-start">
+                            <span>Today, 6:48 AM</span>
+                        </div>
+                        <div class="bubble you">
+                            Hello,
+                        </div>
+                        <div class="bubble you">
+                            it's me.
+                        </div>
+                        <div class="bubble you">
+                            I was wondering...
+                        </div>
+                    </div>
+                    <div class="chat" data-chat="person2">
+                        <div class="conversation-start">
+                            <span>Today, 5:38 PM</span>
+                        </div>
+                        <div class="bubble you">
+                            Hello, can you hear me?
+                        </div>
+                        <div class="bubble you">
+                            I'm in California dreaming
+                        </div>
+                        <div class="bubble me">
+                            ... about who we used to be.
+                        </div>
+                        <div class="bubble me">
+                            Are you serious?
+                        </div>
+                        <div class="bubble you">
+                            When we were younger and free...
+                        </div>
+                        <div class="bubble you">
+                            I've forgotten how it felt before
+                        </div>
+                    </div>
+                    <div class="chat" data-chat="person3">
+                        <div class="conversation-start">
+                            <span>Today, 3:38 AM</span>
+                        </div>
+                        <div class="bubble you">
+                            Hey human!
+                        </div>
+                        <div class="bubble you">
+                            Umm... Someone took a shit in the hallway.
+                        </div>
+                        <div class="bubble me">
+                            ... what.
+                        </div>
+                        <div class="bubble me">
+                            Are you serious?
+                        </div>
+                        <div class="bubble you">
+                            I mean...
+                        </div>
+                        <div class="bubble you">
+                            It’s not that bad...
+                        </div>
+                        <div class="bubble you">
+                            But we’re probably gonna need a new carpet.
+                        </div>
+                    </div>
+                    <div class="write">
+                        <form action="{{ url_for('chat') }}" method="get">
+                            <input type="text" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+    <script>
+        "use strict";
+
+        document.querySelector('.chat[data-chat=person1]').classList.add('active-chat');
+        document.querySelector('.person[data-chat=person1]').classList.add('active');
+        var friends = {
+          list: document.querySelector('ul.people'),
+          all: document.querySelectorAll('.left .person'),
+          name: ''
+        },
+            chat = {
+          container: document.querySelector('.container .right'),
+          current: null,
+          person: null,
+          name: document.querySelector('.container .right .top .name')
+        };
+        friends.all.forEach(function (f) {
+          f.addEventListener('mousedown', function () {
+            f.classList.contains('active') || setAciveChat(f);
+          });
+        });
+
+        function setAciveChat(f) {
+          friends.list.querySelector('.active').classList.remove('active');
+          f.classList.add('active');
+          chat.current = chat.container.querySelector('.active-chat');
+          chat.person = f.getAttribute('data-chat');
+          chat.current.classList.remove('active-chat');
+          chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
+          friends.name = f.querySelector('.name').innerText;
+          chat.name.innerHTML = friends.name;
+        }
+        // var socket = io.connect('http://' + document.domain + ':' + location.port);
+        // socket.on( 'connect', function() {
+        //   socket.emit( 'message', {
+        //     data: 'User Connected'
+        //   })
+        //   var form = $( 'form' ).on( 'submit', function( e ) {
+        //     e.preventDefault()
+        //     let user_name = "{{ username }}"
+        //     let user_input = $( 'input.message' ).val()
+        //     let room_input = $( 'input.room' ).val()
+        //     socket.emit( 'message', {
+        //       user_name : user_name,
+        //       message : user_input,
+        //       room: room_input
+        //     })
+        //     $( 'input.message' ).val( '' ).focus()
+        //   })
+        // })
+        // socket.on( 'response', function( msg ) {
+        //   console.log( msg )
+        //   if( typeof msg.user_name !== 'undefined' ) {
+        //     $( 'h3' ).remove()
+        //     $( 'div.message' )
+        //         .append('<div><b style="color: #000">'+msg.user_name+': </b>'+msg.message+'</div>' )
+        //   }
+        // })
+    </script>
+    {% endblock %}

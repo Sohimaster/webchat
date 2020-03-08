@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(USERNAME_LIMIT), unique=True)
     email = db.Column(db.String(EMAIL_LIMIT), unique=True, default=os.urandom(8))
+    email_hash = db.Column(db.String(EMAIL_LIMIT), unique=True, nullable=False)
     password = db.Column(db.String(PASSWORD_LIMIT))
 
 
@@ -30,10 +31,18 @@ class Chat(db.Model):
     dt_updated = db.Column(db.DateTime, default=time.time())
 
 
+class ChatMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     message = db.Column(db.String(MESSAGE_LIMIT))
     chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    dt_created = db.Column(db.DateTime, default=time.time())
+    dt_updated = db.Column(db.DateTime, default=time.time())
 
 

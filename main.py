@@ -1,5 +1,5 @@
 from app import app
-from src.router import Router
+from app.router import Router
 
 
 app = Router.apply_routes(app)

@@ -1,5 +1,7 @@
 flask
 flask-wtf
 flask-login
+flask_avatars
+flask-migrate
 flask-socketio
 flask_sqlalchemy

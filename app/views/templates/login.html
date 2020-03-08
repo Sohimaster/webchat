@@ -9,7 +9,11 @@
                 {{ form.hidden_tag() }}
                 {{ form.username(placeholder="Username") }}
                 {{ form.password(placeholder="Password") }}
+            <a href="{{ url_for('register') }}"><button type="button" id="register-button">Register</button></a>
                 <button type="submit" id="login-button">Login</button>
             </form>
+            {% if message %}
+                <h3>{{ message }}</h3>
+            {% endif %}
         </div>
     {% endblock %}
