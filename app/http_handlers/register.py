@@ -22,7 +22,7 @@ class RegisterHTTPHandler(BaseHTTPHandler):
             user = User(username=form.username.data,
                         email=form.email.data,
                         password=password,
-                        email_hash=hashlib.sha1(form.email.data.encode('utf-8')).hexdigest())
+                        email_hash=hashlib.sha256(form.email.data.encode('utf-8')).hexdigest())
             db.session.add(user)
             db.session.commit()
             login_user(user)

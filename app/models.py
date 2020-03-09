@@ -21,6 +21,14 @@ class User(UserMixin, db.Model):
     email_hash = db.Column(db.String(EMAIL_LIMIT), unique=True, nullable=False)
     password = db.Column(db.String(PASSWORD_LIMIT))
 
+    @property
+    def serialize(self):
+        return {
+           'id': self.id,
+           'username': self.username,
+           'email_hash': self.email_hash
+        }
+
 
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)

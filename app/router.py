@@ -11,6 +11,7 @@ class Router:
         app.add_url_rule('/login', 'login', view_func=Login.as_view('login'))
         app.add_url_rule('/register', 'register', view_func=Register.as_view('register'))
         app.add_url_rule('/logout', 'logout', logout, methods=['GET', 'POST'])
+        app.add_url_rule('/search', 'search_users', search_users, methods=['POST'])
         return app
 
     @staticmethod

@@ -2,8 +2,18 @@
 *, *:before, *:after {
   box-sizing: border-box;
 }
+.people .aftersearch {
+  overflow: auto;
+  height: auto;
+  margin-left: -1px;
+  border-right: 1px solid var(--light);
+  border-left: 1px solid var(--light);
+}
 .people{
   list-style-type: none;
+}
+.link-without-style{
+  text-decoration: none;
 }
 :root {
   --white: #fff;
@@ -13,6 +23,9 @@
   --dark: #1a1a1a;
   --light: #e6e6e6;
   --blue: #00b0ff;
+}
+hr {
+  border: 1px solid var(--light);
 }
 
 .container {
@@ -118,7 +131,7 @@
 
 .container .left .people .person.active, .container .left .people .person:hover {
   /*background-color: var(--blue);*/
-  background-color:  #87BBE8  ;;
+  background-color:  #3E807E  ;;
   /*background: linear-gradient(to right, #$);*/
 }
 .container .left .people .person.active span, .container .left .people .person:hover span {
@@ -235,7 +248,7 @@
 .container .right .bubble.you {
   float: left;
   color: var(--black);
-  background-color:  #A1A7FF ;
+  background-color:  #72E8C4 ;
   /*background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);*/
   /*background-color: var(--blue);*/
   align-self: flex-start;

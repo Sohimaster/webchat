@@ -1,7 +1,19 @@
-from flask import request, redirect, url_for, render_template
+from flask import request, redirect, url_for, render_template, session, jsonify
 from flask_login import logout_user
 
 from app import login_manager, User
+
+
+def search_users():
+    if username := dict(request.json).get('username'):
+        pass
+    user_id = session['_user_id']
+    users = [user.serialize for user in (User.query
+        .filter(User.username.ilike(username))
+        .filter(User.id != user_id).all()
+    )]
+    print(users)
+    return jsonify(users)
 
 
 def register():

@@ -7,8 +7,9 @@
             <div class="container">
                 <div class="left">
                     <div class="top">
-                        <input type="text" placeholder="Search" />
+                        <input type="text" placeholder="Search" id="search"/>
                     </div>
+                    </ul>
                     <ul class="people">
                         {% for user in users %}
                             <li class="person" data-chat="person{{ user.id }}">
@@ -19,6 +20,7 @@
                                 <span class="preview">I was wondering...</span>
                             </li>
                         {% endfor %}
+                        <ul class="aftersearch" id="aftersearch">
                     </ul>
                 </div>
                 <div class="right">
@@ -50,7 +52,7 @@
                         {% endfor %}
                     <div class="write">
                         <form action="{{ url_for('chat') }}" method="get">
-                            <input type="text" />
+                            <input type="text"/>
                         </form>
                     </div>
                 </div>
@@ -89,31 +91,51 @@
           friends.name = f.querySelector('.name').innerText;
           chat.name.innerHTML = friends.name;
         }
-        // var socket = io.connect('http://' + document.domain + ':' + location.port);
-        // socket.on( 'connect', function() {
-        //   socket.emit( 'message', {
-        //     data: 'User Connected'
-        //   })
-        //   var form = $( 'form' ).on( 'submit', function( e ) {
-        //     e.preventDefault()
-        //     let user_name = "{{ username }}"
-        //     let user_input = $( 'input.message' ).val()
-        //     let room_input = $( 'input.room' ).val()
-        //     socket.emit( 'message', {
-        //       user_name : user_name,
-        //       message : user_input,
-        //       room: room_input
-        //     })
-        //     $( 'input.message' ).val( '' ).focus()
-        //   })
-        // })
-        // socket.on( 'response', function( msg ) {
-        //   console.log( msg )
-        //   if( typeof msg.user_name !== 'undefined' ) {
-        //     $( 'h3' ).remove()
-        //     $( 'div.message' )
-        //         .append('<div><b style="color: #000">'+msg.user_name+': </b>'+msg.message+'</div>' )
-        //   }
-        // })
+
+
+        // Search users
+
+        let searchInput = document.getElementById("search");
+        let searchElements = document.getElementById("aftersearch");
+        let searchInputTimeout = null;
+        searchInput.addEventListener('input', function (e) {
+            clearTimeout(searchInputTimeout);
+            if (searchInput.value) {
+                searchInputTimeout = setTimeout(function () {
+                    searchElements.innerHTML = '<hr>';
+                    console.log('Search users by:', searchInput.value);
+                    let url = '/search';
+                    function displaySearch(users) {
+                        users.forEach(user => {
+                            let userHtml =
+                                `<li class=\"person\" data-chat=\"${user.id}\" onclick="startChat(this)">
+
+                                     <img src=\"https://robohash.org/${user.email_hash}?size=200x200\" alt=\"\" />
+                                     <span class=\"name\">${user.username}</span>
+                                     <br>
+                                     <span class=\"preview\">Click here to start conversation.</span>
+                                 </li>`;
+                            searchElements.innerHTML += userHtml;
+                        });
+                    }
+                    fetch(url,{
+                        method:'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username: searchInput.value })
+                    }).then(response => response.json())
+                      .then(users => displaySearch(users));
+                }, 1000);
+            } else {
+                searchElements.innerHTML = ''
+            }
+        })
+
+
+        function startChat(user) {
+            console.log(user)
+            console.log(user.getAttribute('data-chat'))
+        }
     </script>
     {% endblock %}
