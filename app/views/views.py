@@ -5,7 +5,7 @@ from app import login_manager, User
 
 
 def search_users():
-    username = dict(request.json).get('username')
+    username = request.json.get('username')
     user_id = session['_user_id']
     users = [user.serialize for user in
              (User.query
