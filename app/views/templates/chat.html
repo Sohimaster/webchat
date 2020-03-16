@@ -17,7 +17,7 @@
                                 <img src="{{ avatars.robohash(user.email_hash) }}" alt="" />
                                 <span class="name">{{ user.username }}</span>
                                 <span class="time">2:09 PM</span>
-                                                            <br>
+                                <br>
                                 <span class="preview">I was wondering...</span>
                             </li>
                         {% endfor %}
@@ -134,7 +134,15 @@
 
 
         function startChat(user) {
-            console.log(user)
+            fetch('/startChat',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ stranger_id: user.getAttribute('data-chat') })
+            }).then(response => console.log(response.json()));
+
+            console.log(user);
             console.log(user.getAttribute('data-chat'))
         }
     </script>

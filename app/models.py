@@ -1,6 +1,6 @@
 import os
-import time
 
+from datetime import datetime
 from flask_login import UserMixin
 
 from app import db
@@ -32,11 +32,21 @@ class User(UserMixin, db.Model):
 
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    name = db.Column(db.String(CHAT_NAME_LIMIT))
-    image = db.Column(db.String(CHAT_ICON_NAME_LIMIT))
-    last_message = db.Column(db.String(MESSAGE_LIMIT))
-    dt_created = db.Column(db.DateTime, default=time.time())
-    dt_updated = db.Column(db.DateTime, default=time.time())
+    first_member = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    second_member = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    last_message = db.Column(db.String(MESSAGE_LIMIT), nullable=True)
+    dt_created = db.Column(db.DateTime, default=datetime.now())
+    dt_updated = db.Column(db.DateTime, default=datetime.now())
+
+    @property
+    def serialize(self):
+        return {
+           'id': self.id,
+           'first_member': self.first_member,
+           'second_member': self.second_member,
+           'last_message': self.last_message,
+           'dt_updated': self.dt_updated
+        }
 
 
 class ChatMember(db.Model):
@@ -50,7 +60,7 @@ class Message(db.Model):
     message = db.Column(db.String(MESSAGE_LIMIT))
     chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    dt_created = db.Column(db.DateTime, default=time.time())
-    dt_updated = db.Column(db.DateTime, default=time.time())
+    dt_created = db.Column(db.DateTime, default=datetime.now())
+    dt_updated = db.Column(db.DateTime, default=datetime.now())
 
 
