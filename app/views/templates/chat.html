@@ -13,7 +13,7 @@
                     <ul class="people">
                         <ul class="aftersearch" id="aftersearch"></ul>
                         {% for user in users %}
-                            <li class="person" data-chat="person{{ user.id }}">
+                            <li class="person" data-chat="{{ user.id }}">
                                 <img src="{{ avatars.robohash(user.email_hash) }}" alt="" />
                                 <span class="name">{{ user.username }}</span>
                                 <span class="time">2:09 PM</span>
@@ -26,7 +26,7 @@
                 <div class="right">
                     <div class="top"><span>To: <span class="name"></span></span></div>
                         {% for user in users %}
-                            <div class="chat" data-chat="person{{ user.id }}">
+                            <div class="chat" data-chat="{{ user.id }}" onclick="setAciveChat(this)">
                                 <div class="conversation-start">
                                     <span>Today, 5:38 PM</span>
                                 </div>
@@ -62,8 +62,11 @@
     <script>
         "use strict";
 
-        document.querySelector('.chat[data-chat=person1]').classList.add('active-chat');
-        document.querySelector('.person[data-chat=person1]').classList.add('active');
+        if (document.querySelector('.chat[data-chat=person1]')) {
+            document.querySelector('.chat[data-chat=person1]').classList.add('active-chat');
+            document.querySelector('.person[data-chat=person1]').classList.add('active');
+        }
+
         var friends = {
           list: document.querySelector('ul.people'),
           all: document.querySelectorAll('.left .person'),
@@ -81,14 +84,20 @@
           });
         });
 
-        function setAciveChat(f) {
-          friends.list.querySelector('.active').classList.remove('active');
-          f.classList.add('active');
+        function setAciveChat(element) {
+          let active_chat = friends.list.querySelector('.active');
+          if (active_chat) {
+              active_chat.classList.remove('active');
+          }
+          element.classList.add('active');
           chat.current = chat.container.querySelector('.active-chat');
-          chat.person = f.getAttribute('data-chat');
-          chat.current.classList.remove('active-chat');
+          chat.person = element.getAttribute('data-chat');
+
+          if (chat.current) {
+              chat.current.classList.remove('active-chat');
+          }
           chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
-          friends.name = f.querySelector('.name').innerText;
+          friends.name = element.querySelector('.name').innerText;
           chat.name.innerHTML = friends.name;
         }
 
@@ -130,7 +139,7 @@
             } else {
                 searchElements.innerHTML = ''
             }
-        })
+        });
 
 
         function startChat(user) {
@@ -140,7 +149,8 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ stranger_id: user.getAttribute('data-chat') })
-            }).then(response => console.log(response.json()));
+            }).then(_ => location.reload());
+
 
             console.log(user);
             console.log(user.getAttribute('data-chat'))

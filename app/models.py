@@ -15,7 +15,7 @@ CHAT_NAME_LIMIT = 50
 
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(USERNAME_LIMIT), unique=True)
     email = db.Column(db.String(EMAIL_LIMIT), unique=True, default=os.urandom(8))
     email_hash = db.Column(db.String(EMAIL_LIMIT), unique=True, nullable=False)
@@ -32,8 +32,8 @@ class User(UserMixin, db.Model):
 
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    first_member = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    second_member = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    first_member = db.Column(db.Integer, db.ForeignKey('user.id'))
+    second_member = db.Column(db.Integer, db.ForeignKey('user.id'))
     last_message = db.Column(db.String(MESSAGE_LIMIT), nullable=True)
     dt_created = db.Column(db.DateTime, default=datetime.now())
     dt_updated = db.Column(db.DateTime, default=datetime.now())
