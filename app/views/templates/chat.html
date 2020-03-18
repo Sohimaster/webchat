@@ -58,13 +58,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
     <script>
-        "use strict";
-        if (document.querySelector('.chat[data-chat=person1]')) {
-
-            document.querySelector('.chat[data-chat=person1]').classList.add('active-chat');
-            document.querySelector('.person[data-chat=person1]').classList.add('active');
-        }
-
         let socket = io.connect('http://' + document.domain + ':' + location.port);
         socket.on( 'connect', function() {
             console.log('Connected')
@@ -111,11 +104,11 @@
 
                     let today = new Date();
                     let datetime = today.getFullYear() + "-" +
-                        today.getMonth() + "-" +
-                        today.getDay() + " " +
-                        today.getHours() + ":" +
-                        today.getMinutes() + ":" +
-                        today.getSeconds();
+                        ('0' + today.getMonth()).slice(-2) + "-" +
+                        ('0' + today.getDay()).slice(-2) + " " +
+                        ('0' + today.getHours()).slice(-2) + ":" +
+                        ('0' + today.getMinutes()).slice(-2) + ":" +
+                        ('0' + today.getSeconds()).slice(-2);
 
                     socket.emit('message', datetime, message, receiver_id);
                     message_input.value = '';
@@ -190,10 +183,6 @@
                 },
                 body: JSON.stringify({ stranger_id: user.getAttribute('data-chat') })
             }).then(_ => location.reload());
-
-
-            console.log(user);
-            console.log(user.getAttribute('data-chat'))
         }
     </script>
     {% endblock %}
