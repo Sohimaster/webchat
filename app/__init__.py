@@ -5,6 +5,7 @@ from flask_avatars import Avatars
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
 
 
 TEMPLATE_DIR = os.path.abspath('app/views/templates')
@@ -17,6 +18,7 @@ app.config['SECRET_KEY'] = 'test_key'  # os.urandom(32)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 avatars = Avatars(app)
+sio = SocketIO(app)
 
 from app.models import *
 

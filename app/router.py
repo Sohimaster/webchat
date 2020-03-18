@@ -2,6 +2,7 @@ from app.views import *
 from app.sockets import *
 from app.http_handlers import *
 
+from flask_login import login_required
 
 class Router:
     @staticmethod
@@ -17,6 +18,7 @@ class Router:
 
     @staticmethod
     def apply_socketio_routes(sio):
-        sio.on_event('message', send_message)
-        sio.on_event('join_chat', join_chat)
-        sio.on_event('leave_chat', leave_chat)
+        sio.on_event('message', login_required(on_message))
+        sio.on_event('join_chat', on_join)
+        sio.on_event('leave_chat', on_leave)
+        return sio
