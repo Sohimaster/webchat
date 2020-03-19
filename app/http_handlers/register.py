@@ -19,14 +19,18 @@ class RegisterHTTPHandler(BaseHTTPHandler):
         form = RegisterForm()
         if form.validate_on_submit():
             password = generate_password_hash(form.password.data)
-            user = User(username=form.username.data,
-                        email=form.email.data,
-                        password=password,
-                        email_hash=hashlib.sha256(form.email.data.encode('utf-8')).hexdigest())
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            return redirect(url_for('chat'))
+            if not User.query.filter(User.username == form.username.data).first():
+                user = User(username=form.username.data,
+                            email=form.email.data,
+                            password=password,
+                            email_hash=hashlib.sha256(form.email.data.encode('utf-8')).hexdigest())
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+                return redirect(url_for('chat'))
+            else:
+                message = f'User exists.'
+                return self.get(message)
         else:
             message = f'Please provide a valid {form.errors} value.'
             return self.get(message)
