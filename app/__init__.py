@@ -13,7 +13,7 @@ STATIC_DIR = os.path.abspath('app/views/static')
 
 app = Flask('webchat', template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SECRET_KEY'] = 'test_key'  # os.urandom(32)
+app.config['SECRET_KEY'] = os.urandom(32)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
