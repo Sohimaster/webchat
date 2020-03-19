@@ -27,7 +27,6 @@
 hr {
   border: 1px solid var(--light);
 }
-
 .container {
   position: relative;
   top: 45%;
@@ -130,9 +129,7 @@ hr {
 }
 
 .container .left .people .person.active, .container .left .people .person:hover {
-  /*background-color: var(--blue);*/
   background-color:  #3E807E  ;;
-  /*background: linear-gradient(to right, #$);*/
 }
 .container .left .people .person.active span, .container .left .people .person:hover span {
   color: var(--white);
@@ -174,42 +171,15 @@ hr {
   justify-content: flex-end;
   flex-direction: column;
 }
+.chat_wrapper{
+  width: calc(100% + 35px);
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
 .container .right .chat.active-chat {
-  display: block;
+  padding-bottom: 5px;
   display: flex;
-}
-.container .right .chat.active-chat .bubble {
-  transition-timing-function: cubic-bezier(0.4, -0.04, 1, 1);
-}
-.container .right .chat.active-chat .bubble:nth-of-type(1) {
-  animation-duration: 0.15s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(2) {
-  animation-duration: 0.3s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(3) {
-  animation-duration: 0.45s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(4) {
-  animation-duration: 0.6s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(5) {
-  animation-duration: 0.75s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(6) {
-  animation-duration: 0.9s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(7) {
-  animation-duration: 1.05s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(8) {
-  animation-duration: 1.2s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(9) {
-  animation-duration: 1.35s;
-}
-.container .right .chat.active-chat .bubble:nth-of-type(10) {
-  animation-duration: 1.5s;
+  height: calc(100% - 150px);
 }
 .container .right .write {
   position: absolute;
@@ -249,8 +219,6 @@ hr {
   float: left;
   color: var(--black);
   background-color:  #72E8C4 ;
-  /*background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);*/
-  /*background-color: var(--blue);*/
   align-self: flex-start;
   animation-name: slideFromLeft;
 }
@@ -259,6 +227,7 @@ hr {
   background-color: var(--blue);
 }
 .container .right .bubble.me {
+  margin-right: 20px;
   float: right;
   color: var(--dark);
   background-color: #eceff1;
@@ -294,47 +263,6 @@ hr {
 }
 .container .right .conversation-start span:after {
   right: 0;
-}
-
-@keyframes slideFromLeft {
-  0% {
-    margin-left: -200px;
-    opacity: 0;
-  }
-  100% {
-    margin-left: 0;
-    opacity: 1;
-  }
-}
-@-webkit-keyframes slideFromLeft {
-  0% {
-    margin-left: -200px;
-    opacity: 0;
-  }
-  100% {
-    margin-left: 0;
-    opacity: 1;
-  }
-}
-@keyframes slideFromRight {
-  0% {
-    margin-right: -200px;
-    opacity: 0;
-  }
-  100% {
-    margin-right: 0;
-    opacity: 1;
-  }
-}
-@-webkit-keyframes slideFromRight {
-  0% {
-    margin-right: -200px;
-    opacity: 0;
-  }
-  100% {
-    margin-right: 0;
-    opacity: 1;
-  }
 }
 #logout-button {
   margin-left: calc(56.5% - 250px);

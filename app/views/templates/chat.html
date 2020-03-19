@@ -1,6 +1,7 @@
 {% extends "main.html" %}
     {% block styles %}
         <link rel="stylesheet" href={{ url_for('static', filename='css/chat.css') }}>
+        <link rel="stylesheet" href={{ url_for('static', filename='css/animations.css') }}>
     {% endblock %}
     {% block content %}
         <a href="{{ url_for('logout') }}"><button type="button" id="logout-button">Logout</button></a>
@@ -12,41 +13,38 @@
                     </ul>
                     <ul class="people">
                         <ul class="aftersearch" id="aftersearch"></ul>
-                        {% for user in users %}
-                            <li class="person" data-chat="{{ user.id }}" onmousedown="setAciveChat(this)">
+                        {% for chat in chats %}
+                            {% set user = mapped.get(chat.id) %}
+                            <li class="person" data-chat="{{ chat.id }}" onmousedown="setAciveChat(this)">
                                 <img src="{{ avatars.robohash(user.email_hash) }}" alt="" />
                                 <span class="name">{{ user.username }}</span>
-                                <span class="time">2:09 PM</span>
+                                <span class="time">{{ chat.dt_updated }}</span>
                                 <br>
-                                <span class="preview">I was wondering...</span>
+                                <span class="preview">
+                                    {% if chat.last_message %}
+                                        {{ chat.last_message }}
+                                    {% endif %}
+                                </span>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="right">
                     <div class="top"><span>To: <span class="name"></span></span></div>
-                        {% for user in users %}
-                            <div class="chat" data-chat="{{ user.id }}" onclick="setAciveChat(this)">
-                                <div class="conversation-start">
-                                    <span>Today, 5:38 PM</span>
-                                </div>
-                                <div class="bubble you">
-                                    Hello, can you hear me?
-                                </div>
-                                <div class="bubble you">
-                                    I'm in California dreaming
-                                </div>
-                                <div class="bubble me">
-                                    ... about who we used to be.
-                                </div>
-                                <div class="bubble me">
-                                    Are you serious?
-                                </div>
-                                <div class="bubble you">
-                                    When we were younger and free...
-                                </div>
-                                <div class="bubble you">
-                                    I've forgotten how it felt before
+                    <input type="hidden" value="{{ session.get('_user_id') | int }}" id="user_id">
+                        {% for chat in chats %}
+                            {% set user = mapped.get(chat.id) %}
+                            <div class="chat" data-chat="{{ chat.id }}" data-user="{{ user.id }}">
+                                <div class="chat_wrapper">
+                                    {% for message in chat.messages %}
+                                        {% if message.user_id == session.get('_user_id') | int %}
+                                            <div class="bubble me">
+                                        {% else %}
+                                            <div class="bubble you">
+                                        {% endif %}
+                                            {{ message.message }}
+                                            </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         {% endfor %}
@@ -57,132 +55,5 @@
             </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
-    <script>
-        let socket = io.connect('http://' + document.domain + ':' + location.port);
-        socket.on( 'connect', function() {
-            console.log('Connected')
-        });
-
-        let chat = {
-          container: document.querySelector('.container .right'),
-          current: null,
-          person: null,
-          name: document.querySelector('.container .right .top .name')
-        };
-
-        function setAciveChat(element) {
-            let active_person = document.querySelector('.active');
-            if (active_person) {
-                active_person.classList.remove('active');
-            }
-            element.classList.add('active');
-            chat.current = chat.container.querySelector('.active-chat');
-            chat.person = element.getAttribute('data-chat');
-
-            let active_chat = chat.container.querySelector('[data-chat="' + chat.person + '"]');
-            if (chat.current) {
-                chat.current.classList.remove('active-chat');
-            }
-            active_chat.classList.add('active-chat');
-            chat.name.innerHTML = element.querySelector('.name').innerText;
-
-            for (let element of active_chat.children) {
-                element.classList.remove('notransition');
-            }
-        }
-
-
-        // Send message
-        let message_input = document.getElementById("send_message");
-        message_input.onkeypress = async function(event){
-                if (event.keyCode == 13 || event.which == 13){
-                    let message = message_input.value;
-                    let receiver_id = document.querySelector('.active')
-                        .getAttribute('data-chat');
-                    let active_chat = chat.container
-                        .querySelector('[data-chat="' + receiver_id + '"]');
-
-                    let today = new Date();
-                    let datetime = today.getFullYear() + "-" +
-                        ('0' + today.getMonth()).slice(-2) + "-" +
-                        ('0' + today.getDay()).slice(-2) + " " +
-                        ('0' + today.getHours()).slice(-2) + ":" +
-                        ('0' + today.getMinutes()).slice(-2) + ":" +
-                        ('0' + today.getSeconds()).slice(-2);
-
-                    socket.emit('message', datetime, message, receiver_id);
-                    message_input.value = '';
-                    active_chat.classList.add('notransition');
-                    for (let element of active_chat.children) {
-                        element.classList.add('notransition');
-                    }
-                    active_chat.innerHTML += `<div class="bubble me notransition">
-                        ${message}</div>`;
-                }
-            };
-
-        // Get message
-
-        socket.on( 'render_message', function( json_data ) {
-            // {
-            //     'sender_id',
-            //     'receiver_id',
-            //     'datetime',
-            //     'message'
-            // }
-            console.log( 'render_message', json_data );
-            let sender_chat = chat.container.querySelector('[data-chat="' + json_data['sender_id'] + '"]')
-        });
-
-
-        // Search users
-
-        let searchInput = document.getElementById("search");
-        let searchElements = document.getElementById("aftersearch");
-        let searchInputTimeout = null;
-        searchInput.addEventListener('input', function (e) {
-            clearTimeout(searchInputTimeout);
-            if (searchInput.value) {
-                searchInputTimeout = setTimeout(function () {
-                    searchElements.innerHTML = '<hr>';
-                    console.log('Search users by:', searchInput.value);
-                    let url = '/search';
-                    function displaySearch(users) {
-                        users.forEach(user => {
-                            let userHtml =
-                                `<li class=\"person\" data-chat=\"${user.id}\" onclick="startChat(this)">
-
-                                     <img src=\"https://robohash.org/${user.email_hash}?size=200x200\" alt=\"\" />
-                                     <span class=\"name\">${user.username}</span>
-                                     <br>
-                                     <span class=\"preview\">Click here to start conversation.</span>
-                                 </li>`;
-                            searchElements.innerHTML += userHtml;
-                        });
-                    }
-                    fetch(url,{
-                        method:'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ username: searchInput.value })
-                    }).then(response => response.json())
-                      .then(users => displaySearch(users));
-                }, 1000);
-            } else {
-                searchElements.innerHTML = ''
-            }
-        });
-
-
-        function startChat(user) {
-            fetch('/startChat',{
-                method:'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ stranger_id: user.getAttribute('data-chat') })
-            }).then(_ => location.reload());
-        }
-    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% endblock %}

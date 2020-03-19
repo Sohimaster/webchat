@@ -45,7 +45,7 @@ class Chat(db.Model):
            'first_member': self.first_member,
            'second_member': self.second_member,
            'last_message': self.last_message,
-           'dt_updated': self.dt_updated
+           'dt_updated': datetime.strftime(self.dt_updated, '%Y-%m-%d %H:%M:%S')
         }
 
 
@@ -63,4 +63,13 @@ class Message(db.Model):
     dt_created = db.Column(db.DateTime, default=datetime.now())
     dt_updated = db.Column(db.DateTime, default=datetime.now())
 
-
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'chat_id': self.chat_id,
+            'user_id': self.user_id,
+            'message': self.message,
+            'dt_created': self.dt_created,
+            'dt_updated': self.dt_updated
+        }
