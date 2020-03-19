@@ -46,7 +46,7 @@ def on_message(_datetime, message, chat_id):
         datetime=datetime.strptime(_datetime, '%Y-%m-%d %H:%M:%S'),
         sender_id=session.get('_user_id'),
         chat_id=chat_id,
-        message=message)
+        message=message.encode('latin-1').decode('utf-8'))
     chat = Chat.query.get(chat_id)
     chat.last_message = message_data.message
     chat.dt_updated = message_data.datetime

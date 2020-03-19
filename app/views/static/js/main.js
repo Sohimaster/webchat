@@ -85,16 +85,21 @@ socket.on( 'render_message', function( json_data ) {
     //     'datetime',
     //     'message'
     // }
+    let active_person = document.querySelector('.active');
+    let preview = active_person.querySelector('.preview');
     let user_id = document.getElementById('user_id').value;
     let sender_id = json_data['sender_id'];
+    let message = json_data['message'];
     let chat = document
         .querySelector('.right')
         .querySelector('[data-chat="' + json_data['chat_id'] + '"]')
         .querySelector('.chat_wrapper');
     if (user_id !== sender_id) {
          chat.innerHTML += `<div class="bubble you notransition">
-                                ${json_data['message']}
+                                ${message}
                             </div>`;
+    preview.innerHTML = message;
+    chat.scrollTo(0,chat.scrollHeight);
     }
 });
 

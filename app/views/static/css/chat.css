@@ -2,6 +2,7 @@
 *, *:before, *:after {
   box-sizing: border-box;
 }
+
 .people .aftersearch {
   overflow: auto;
   height: auto;
@@ -195,7 +196,7 @@ hr {
 .container .right .write input {
   font-size: 16px;
   float: left;
-  width: 347px;
+  width: 100%;
   height: 40px;
   padding: 0 10px;
   color: var(--dark);
