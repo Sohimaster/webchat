@@ -1,5 +1,6 @@
-from flask import render_template, session
 from flask_login import login_required
+from flask import render_template, session, \
+    request, redirect, url_for
 
 from app.models import *
 from app.http_handlers.base import BaseHTTPHandler
@@ -36,4 +37,15 @@ class ChatHTTPHandler(BaseHTTPHandler):
 
     @login_required
     def post(self):
-        pass
+        request_data = request.json
+        receiver_id = request_data.get('stranger_id')
+        user_id = session['_user_id']
+        if receiver_id and user_id and not \
+                Chat.query.filter(
+                    (Chat.first_member.in_((receiver_id, user_id))) &
+                    (Chat.second_member.in_((receiver_id, user_id)))) \
+                        .first():
+            chat = Chat(first_member=receiver_id, second_member=user_id)
+            db.session.add(chat)
+            db.session.commit()
+        return redirect(url_for('chat'))

@@ -144,7 +144,7 @@ searchInput.addEventListener('input', function (e) {
 
 
 function startChat(user) {
-    fetch('/startChat',{
+    fetch('/chat',{
         method:'POST',
         headers: {
             'Content-Type': 'application/json',
