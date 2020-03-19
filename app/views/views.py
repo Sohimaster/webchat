@@ -6,10 +6,14 @@ from app import db, login_manager, User, ChatMember, Chat
 
 def start_chat():
     request_data = request.json
-    stranger_id = request_data.get('stranger_id')
+    receiver_id = request_data.get('stranger_id')
     user_id = session['_user_id']
-    if stranger_id and user_id:
-        chat = Chat(first_member=stranger_id, second_member=user_id)
+    if receiver_id and user_id and not \
+            Chat.query.filter(
+                (Chat.first_member.in_((receiver_id, user_id))) &
+                (Chat.second_member.in_((receiver_id, user_id))))\
+            .first():
+        chat = Chat(first_member=receiver_id, second_member=user_id)
         db.session.add(chat)
         db.session.commit()
     return redirect(url_for('chat'))
