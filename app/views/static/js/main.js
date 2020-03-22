@@ -56,12 +56,12 @@ message_input.onkeypress = async function(event){
             let wrapper = active_chat.querySelector('.chat_wrapper');
             let today = new Date();
             let datetime = today.getFullYear() + "-" +
-                ('0' + today.getMonth()).slice(-2) + "-" +
-                ('0' + today.getDay()).slice(-2) + " " +
+                ('0' + (today.getMonth() + 1)) + "-" +
+                ('0' + today.getDate()).slice(-2) + " " +
                 ('0' + today.getHours()).slice(-2) + ":" +
                 ('0' + today.getMinutes()).slice(-2) + ":" +
                 ('0' + today.getSeconds()).slice(-2);
-
+            console.log(datetime);
             socket.emit('message', datetime, message, chat_id);
             message_input.value = '';
             wrapper.classList.add('notransition');
