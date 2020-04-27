@@ -18,7 +18,7 @@ class RegisterHTTPHandler(BaseHTTPHandler):
     def post(self):
         form = RegisterForm()
         if form.validate_on_submit():
-            if form.repeated_password != form.password:
+            if form.repeated_password.data != form.password.data:
                 return self.get(message='Passwords does not match.')
 
             password = generate_password_hash(form.password.data)
