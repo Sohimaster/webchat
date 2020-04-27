@@ -18,6 +18,9 @@ class RegisterHTTPHandler(BaseHTTPHandler):
     def post(self):
         form = RegisterForm()
         if form.validate_on_submit():
+            if not form.repeated_password == form.password:
+                return self.get(message='Passwords does not match.')
+
             password = generate_password_hash(form.password.data)
             if not User.query.filter(User.username == form.username.data).first():
                 user = User(username=form.username.data,
@@ -29,8 +32,6 @@ class RegisterHTTPHandler(BaseHTTPHandler):
                 login_user(user)
                 return redirect(url_for('chat'))
             else:
-                message = f'User exists.'
-                return self.get(message)
+                return self.get(message='User exists.')
         else:
-            message = f'Please provide a valid {form.errors} value.'
-            return self.get(message)
+            return self.get(message=f'Please provide a valid {form.errors} value.')
