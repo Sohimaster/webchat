@@ -17,7 +17,7 @@ CHAT_NAME_LIMIT = 50
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(USERNAME_LIMIT), unique=True)
-    email = db.Column(db.String(EMAIL_LIMIT), unique=True, default=os.urandom(8))
+    email = db.Column(db.String(EMAIL_LIMIT), unique=True)
     email_hash = db.Column(db.String(EMAIL_LIMIT), unique=True, nullable=False)
     password = db.Column(db.String(PASSWORD_LIMIT))
 
