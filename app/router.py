@@ -20,5 +20,4 @@ class Router:
     def apply_socketio_routes(sio):
         sio.on_event('message', login_required(on_message))
         sio.on_event('join', on_join)
-        sio.on_event('leave', on_leave)
         return sio
