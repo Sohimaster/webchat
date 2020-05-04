@@ -30,15 +30,8 @@ class SocketMessage:
 def on_join(chat_id):
     user_id = int(session.get('_user_id'))
     chat = Chat.query.get(chat_id)
-    if chat.first_member == user_id or chat.second_member == user_id:
+    if user_id in (chat.first_member, chat.second_member):
         join_room(chat_id)
-
-
-def on_leave(data):
-    username = data.get('user_name')
-    room = data.get('room')
-    leave_room(room)
-    sio.emit(username + ' has left the room.', room=room)
 
 
 def on_message(_datetime, message, chat_id):
