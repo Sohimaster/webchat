@@ -144,7 +144,7 @@ searchInput.addEventListener('input', function (e) {
     clearTimeout(searchInputTimeout);
     if (searchInput.value) {
         searchInputTimeout = setTimeout(function () {
-            searchElements.innerHTML = '<hr>';
+            // searchElements.innerHTML = '<hr>';
             console.log('Search users by:', searchInput.value);
             let url = '/search';
             function displaySearch(users) {
@@ -155,10 +155,11 @@ searchInput.addEventListener('input', function (e) {
                              <img src=\"https://robohash.org/${user.email_hash}?size=200x200\" alt=\"\" />
                              <span class=\"name\">${user.username}</span>
                              <br>
-                             <span class=\"preview\">Click here to start conversation.</span>
+                             <span class=\"preview\">Start conversation!</span>
                          </li>`;
                     searchElements.innerHTML += userHtml;
                 });
+                searchElements.innerHTML += '<hr>';
             }
             fetch(url,{
                 method:'POST',

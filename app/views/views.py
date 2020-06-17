@@ -9,7 +9,7 @@ def search_users():
     user_id = session['_user_id']
     users = [user.serialize for user in
              (User.query
-              .filter(User.username.ilike(username))
+              .filter(User.username.contains(username))
               .filter(User.id != user_id).all())]
     return jsonify(users)
 
