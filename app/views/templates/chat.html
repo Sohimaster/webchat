@@ -8,10 +8,10 @@
             <div class="container">
                 <div class="left">
                     <div class="top">
-                        <input type="text" placeholder="Search" id="search"/>
+                        <input type="text" placeholder="Search" id="search" autocomplete="off"/>
                     </div>
                     </ul>
-                    <ul class="people">
+                    <ul class="people" id="people">
                         <ul class="aftersearch" id="aftersearch"></ul>
                         {% for chat in chats %}
                             {% set user = mapped.get(chat.id) %}
@@ -49,7 +49,7 @@
                             </div>
                         {% endfor %}
                     <div class="write">
-                        <input type="text" id="send_message"/>
+                        <input type="text" id="send_message" autocomplete="off"/>
                     </div>
                 </div>
             </div>

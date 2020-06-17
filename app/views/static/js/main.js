@@ -57,6 +57,14 @@ function getDatetime(){
         ('0' + today.getSeconds()).slice(-2);
 }
 
+function setFirstPerson(element) {
+    chats = document.getElementById('people');
+    insertAfter(element, chats.firstElementChild)
+}
+
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 // Send message
 let message_input = document.getElementById("send_message");
 message_input.onkeypress = async function(event){
@@ -71,7 +79,7 @@ message_input.onkeypress = async function(event){
         let active_chat = chat.container
             .querySelector('[data-chat="' + chat_id + '"]');
         let wrapper = active_chat.querySelector('.chat_wrapper');
-
+        let time = active_person.querySelector('.time');
         let datetime = getDatetime();
         console.log(datetime);
 
@@ -85,7 +93,11 @@ message_input.onkeypress = async function(event){
                                     ${message}
                               </div>`;
         preview.innerHTML = message;
+        time.innerHTML = getDatetime();
+
         wrapper.scrollTo(0,wrapper.scrollHeight);
+        setFirstPerson(active_person);
+
     }
 };
 
@@ -98,23 +110,28 @@ socket.on( 'render_message', function( json_data ) {
     //     'datetime',
     //     'message'
     // }
-    let person = document
-        .querySelector('.left')
-        .querySelector('[data-chat="' + json_data['chat_id'] + '"]');
-    let preview = person.querySelector('.preview');
-    let user_id = document.getElementById('user_id').value;
     let sender_id = json_data['sender_id'];
-    let message = json_data['message'];
-    let chat = document
-        .querySelector('.right')
-        .querySelector('[data-chat="' + json_data['chat_id'] + '"]')
-        .querySelector('.chat_wrapper');
+    let user_id = document.getElementById('user_id').value;
+
     if (user_id !== sender_id) {
-         chat.innerHTML += `<div class="bubble you notransition">
-                                ${message}
-                            </div>`;
-    preview.innerHTML = message;
-    chat.scrollTo(0,chat.scrollHeight);
+        let person = document
+            .querySelector('.left')
+            .querySelector('[data-chat="' + json_data['chat_id'] + '"]');
+        let preview = person.querySelector('.preview');
+        let time = person.querySelector('.time');
+        let message = json_data['message'];
+        let chat = document
+            .querySelector('.right')
+            .querySelector('[data-chat="' + json_data['chat_id'] + '"]')
+            .querySelector('.chat_wrapper');
+             chat.innerHTML += `<div class="bubble you notransition">
+                                    ${message}
+                                </div>`;
+        preview.innerHTML = message;
+        time.innerHTML = getDatetime();
+
+        chat.scrollTo(0,chat.scrollHeight);
+        setFirstPerson(person);
     }
 });
 
