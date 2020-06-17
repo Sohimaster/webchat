@@ -1,9 +1,10 @@
 from flask import request, redirect, url_for, session, jsonify
-from flask_login import logout_user
+from flask_login import logout_user, login_required
 
 from app import login_manager, User
 
 
+@login_required
 def search_users():
     username = request.json.get('username')
     user_id = session['_user_id']
