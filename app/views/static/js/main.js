@@ -141,6 +141,7 @@ let searchInput = document.getElementById("search");
 let searchElements = document.getElementById("aftersearch");
 let searchInputTimeout = null;
 searchInput.addEventListener('input', function (e) {
+    searchElements.innerHTML = '';
     clearTimeout(searchInputTimeout);
     if (searchInput.value) {
         searchInputTimeout = setTimeout(function () {
@@ -169,7 +170,7 @@ searchInput.addEventListener('input', function (e) {
                 body: JSON.stringify({ username: searchInput.value })
             }).then(response => response.json())
               .then(users => displaySearch(users));
-        }, 1000);
+        }, 100);
     } else {
         searchElements.innerHTML = ''
     }
